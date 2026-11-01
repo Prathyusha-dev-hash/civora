@@ -11,6 +11,8 @@ export default defineConfig(({ mode }) => {
       react(),
     ],
     server: {
+      // Allow public tunnel URLs (Cloudflare quick tunnel / ngrok) to reach the dev server for demos
+      allowedHosts: ['.trycloudflare.com', '.ngrok-free.app', '.ngrok.app'],
       // Forward API + signed evidence file requests to the Civora backend in development
       proxy: {
         '/api': {

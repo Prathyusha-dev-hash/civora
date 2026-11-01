@@ -13,7 +13,10 @@ const config = {
   isProd,
   port: num(process.env.PORT, 5000),
   mongoUri: process.env.MONGODB_URI || '',
-  corsOrigin: process.env.CORS_ORIGIN || process.env.FRONTEND_URL || 'http://localhost:5173',
+  corsOrigin: (process.env.CORS_ORIGIN || process.env.FRONTEND_URL || 'http://localhost:5173')
+    .split(',')
+    .map((origin) => origin.trim().replace(/\/+$/, ''))
+    .filter(Boolean),
 
   jwt: {
     secret: process.env.JWT_SECRET || '',

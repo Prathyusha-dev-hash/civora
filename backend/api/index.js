@@ -53,6 +53,8 @@ async function maybeRunMaintenance() {
 }
 
 module.exports = async (req, res) => {
+  if (req.method === 'OPTIONS') return app(req, res);
+
   try {
     await init();
   } catch (err) {
