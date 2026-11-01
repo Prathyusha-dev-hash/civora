@@ -1,0 +1,381 @@
+/**
+ * Civora Design Tokens & Theme Specification
+ * Option 9 – Dusty Blue (Subtle Blue Prominence)
+ * 
+ * Palette:
+ * - Page Background: Very Light Grey (#F7F9FB / Dark: #202C38)
+ * - Header Background: Light Dusty Blue (#E7EEF5 / Dark: #263746)
+ * - Card Background: White (#FFFFFF / Dark: #2D3C49)
+ * - Primary: Dusty Blue (#7C97B0 / Dark: #8FAFCB)
+ * - Secondary: Muted Blue Grey (#9BAFC1 / Dark: #7597B4)
+ * - Soft Accent: Pale Blue (#D6E3EF / Dark: #263746)
+ * - Borders: Soft Grey Blue (#E1E7EE / Dark: #40515F)
+ * - Primary Text: Deep Blue Charcoal (#2E4A62 / Dark: #F2F5F8)
+ * - Secondary Text: Muted Grey Blue (#64748B / Dark: #B7C3CE)
+ * - Status Success: Muted Green (#2E7D6B / Dark: #4EAD97)
+ * - Status Warning: Muted Amber (#B7791F / Dark: #E09E3E)
+ * - Status Error: Muted Red (#C74949 / Dark: #E56B6B)
+ */
+
+:root,
+[data-theme="light"] {
+  --color-page-bg: #F7F9FB;
+  --color-header-bg: #E7EEF5;
+  --color-card-bg: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-surface-subtle: #F7F9FB;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-hover: #EEF3F8;
+
+  --color-primary: #7C97B0;
+  --color-primary-hover: #69849E;
+  --color-primary-active: #58738D;
+  --color-primary-subtle: #E7EEF5;
+
+  --color-secondary: #9BAFC1;
+  --color-secondary-hover: #889DB0;
+
+  --color-accent: #D6E3EF;
+  --color-accent-hover: #C5D5E4;
+  --color-accent-text: #2E4A62;
+
+  --color-border: #E1E7EE;
+  --color-border-subtle: #EAF0F6;
+  --color-border-strong: #CDD7E2;
+
+  --color-text-primary: #2E4A62;
+  --color-text-secondary: #64748B;
+  --color-text-muted: #8292A2;
+  --color-text-brand: #2E4A62;
+
+  --color-civic-critical: #C74949;
+  --color-civic-warning: #B7791F;
+  --color-civic-success: #2E7D6B;
+  --color-civic-info: #7C97B0;
+
+  /* Backward Compatibility Aliases */
+  --color-canvas: #F7F9FB;
+  --color-canvas-hover: #EEF3F8;
+  --color-forest: #7C97B0;
+  --color-forest-dark: #69849E;
+  --color-forest-light: #8FAFCB;
+  --color-forest-subtle: #E7EEF5;
+  --color-teal: #9BAFC1;
+  --color-teal-dark: #859BAE;
+  --color-teal-light: #B4C4D3;
+  --color-teal-subtle: #D6E3EF;
+  --color-warm-gray: #F7F9FB;
+  --color-warm-gray-hover: #EEF3F8;
+  --color-warm-gray-border: #E1E7EE;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+
+.dark,
+[data-theme="dark"] {
+  --color-page-bg: #202C38;
+  --color-header-bg: #263746;
+  --color-card-bg: #2D3C49;
+  --color-surface: #2D3C49;
+  --color-surface-subtle: #24323E;
+  --color-surface-elevated: #354756;
+  --color-surface-hover: #354756;
+
+  --color-primary: #8FAFCB;
+  --color-primary-hover: #A1BDD6;
+  --color-primary-active: #B4CCE0;
+  --color-primary-subtle: #263746;
+
+  --color-secondary: #7597B4;
+  --color-secondary-hover: #88A7C2;
+
+  --color-accent: #263746;
+  --color-accent-hover: #314557;
+  --color-accent-text: #F2F5F8;
+
+  --color-border: #40515F;
+  --color-border-subtle: #364653;
+  --color-border-strong: #4F6374;
+
+  --color-text-primary: #F2F5F8;
+  --color-text-secondary: #B7C3CE;
+  --color-text-muted: #8C9CA9;
+  --color-text-brand: #F2F5F8;
+  --color-text-accent: #8FAFCB;
+
+  --color-civic-critical: #E56B6B;
+  --color-civic-warning: #E09E3E;
+  --color-civic-success: #4EAD97;
+  --color-civic-info: #8FAFCB;
+
+  /* Backward Compatibility Aliases */
+  --color-canvas: #202C38;
+  --color-canvas-hover: #263746;
+  --color-forest: #8FAFCB;
+  --color-forest-dark: #7597B4;
+  --color-forest-light: #A1BDD6;
+  --color-forest-subtle: #263746;
+  --color-teal: #7597B4;
+  --color-teal-dark: #62839F;
+  --color-teal-light: #8FAFCB;
+  --color-teal-subtle: #263746;
+  --color-warm-gray: #202C38;
+  --color-warm-gray-hover: #263746;
+  --color-warm-gray-border: #40515F;
+
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   Dark Mode Surface, Card & Container Adaptations
+   ========================================================================== */
+
+.dark body {
+  background-color: var(--color-page-bg);
+  color: var(--color-text-primary);
+}
+
+.dark .bg-white {
+  background-color: var(--color-card-bg);
+}
+
+.dark .bg-\[\#F7F9FB\],
+.dark .bg-\[\#F6F7F5\] {
+  background-color: var(--color-page-bg);
+}
+
+.dark .bg-\[\#F7F9FB\]\/50,
+.dark .bg-\[\#F6F7F5\]\/50,
+.dark .bg-\[\#F6F7F5\]\/60 {
+  background-color: var(--color-surface-subtle);
+}
+
+.dark .bg-\[\#E7EEF5\] {
+  background-color: var(--color-header-bg);
+  color: var(--color-text-primary);
+}
+
+.dark .bg-\[\#D6E3EF\] {
+  background-color: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+.dark .border-\[\#E1E7EE\] {
+  border-color: var(--color-border);
+}
+
+/* ==========================================================================
+   Dark Mode Typography Contrasts
+   ========================================================================== */
+
+.dark .text-\[\#2E4A62\],
+.dark .text-slate-900,
+.dark .text-slate-800 {
+  color: var(--color-text-primary);
+}
+
+.dark .text-\[\#64748B\],
+.dark .text-slate-700,
+.dark .text-slate-600 {
+  color: var(--color-text-secondary);
+}
+
+.dark .text-slate-500 {
+  color: var(--color-text-muted);
+}
+
+.dark .hover\:text-\[\#2E4A62\]:hover {
+  color: var(--color-primary);
+}
+
+.dark .hover\:bg-\[\#F7F9FB\]:hover {
+  background-color: var(--color-surface-hover);
+}
+
+/* ==========================================================================
+   Dark Mode Form Controls & Interactive Inputs
+   ========================================================================== */
+
+.dark input:not([type="checkbox"]):not([type="radio"]),
+.dark select,
+.dark textarea {
+  background-color: #202C38;
+  color: var(--color-text-primary);
+  border-color: #40515F;
+}
+
+.dark input:not([type="checkbox"]):not([type="radio"]):focus,
+.dark select:focus,
+.dark textarea:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #8C9CA9;
+}
+
+/* Select option dropdowns */
+.dark option {
+  background-color: var(--color-card-bg);
+  color: var(--color-text-primary);
+}
+
+/* ==========================================================================
+   Dark Mode Data Tables & Lists
+   ========================================================================== */
+
+.dark table thead tr {
+  background-color: #263746;
+  border-color: var(--color-border);
+}
+
+.dark table thead th {
+  color: var(--color-text-secondary);
+}
+
+.dark table tbody tr {
+  border-color: var(--color-border);
+}
+
+.dark table tbody tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+/* ==========================================================================
+   Leaflet Maps Dark Mode Rendering
+   ========================================================================== */
+
+.dark .leaflet-tile {
+  filter: brightness(0.7) invert(1) contrast(2.2) hue-rotate(185deg) saturate(0.35) brightness(0.85);
+}
+
+.dark .leaflet-container {
+  background-color: #202C38;
+}
+
+.dark .leaflet-popup-content-wrapper,
+.dark .leaflet-popup-tip {
+  background: var(--color-card-bg) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45) !important;
+}
+
+.dark .leaflet-popup-content {
+  color: var(--color-text-primary) !important;
+}
+
+.dark .leaflet-bar a {
+  background-color: var(--color-card-bg) !important;
+  color: var(--color-text-primary) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+.dark .leaflet-bar a:hover {
+  background-color: var(--color-surface-hover) !important;
+}
+
+/* ==========================================================================
+   Senior-Friendly Accessible Typography Scales
+   Default: Large (18px base root)
+   Normal: 16px base root
+   Extra Large: 20px base root
+   ========================================================================== */
+
+:root,
+html[data-font-size="large"] {
+  font-size: 18px;
+  --font-size-root: 18px;
+  --font-size-base: 18px;
+  --line-height-body: 1.65;
+  --line-height-heading: 1.3;
+  --target-min-height: 48px;
+}
+
+html[data-font-size="normal"] {
+  font-size: 16px;
+  --font-size-root: 16px;
+  --font-size-base: 16px;
+  --line-height-body: 1.6;
+  --line-height-heading: 1.35;
+  --target-min-height: 44px;
+}
+
+html[data-font-size="extralarge"] {
+  font-size: 20px;
+  --font-size-root: 20px;
+  --font-size-base: 20px;
+  --line-height-body: 1.7;
+  --line-height-heading: 1.25;
+  --target-min-height: 52px;
+}
+
+/* ==========================================================================
+   Accessibility & Senior-Friendly Typography Overrides
+   ========================================================================== */
+
+/* Prevent tiny, illegible font sizes anywhere in the app */
+.text-\[9px\],
+.text-\[10px\],
+.text-\[11px\],
+.text-\[12px\],
+.text-\[13px\] {
+  font-size: var(--text-xs) !important;
+  line-height: 1.5 !important;
+}
+
+/* Ensure minimum line-height for comfortable reading */
+body, p, li, td {
+  line-height: var(--line-height-body, 1.65);
+}
+
+/* Headings with high contrast and confident weights */
+h1, h2, h3, h4, h5, h6 {
+  line-height: var(--line-height-heading, 1.3);
+  font-weight: 700;
+}
+
+/* Minimum interactive touch target for mobile (44-48px) */
+button,
+a[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  min-height: 44px;
+}
+
+/* Accessible inputs and selects */
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  font-size: var(--text-base) !important;
+}
+
+/* Accessible checkboxes and radio buttons */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  cursor: pointer;
+}
+
+/* Accessible table typography and comfortable row padding */
+table {
+  font-size: var(--text-sm);
+}
+
+table th {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding-top: 0.875rem !important;
+  padding-bottom: 0.875rem !important;
+}
+
+table td {
+  font-size: var(--text-sm);
+  padding-top: 0.875rem !important;
+  padding-bottom: 0.875rem !important;
+}

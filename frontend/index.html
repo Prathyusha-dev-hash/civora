@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" data-font-size="large">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Civora | Civic Issue Reporting & Accountability Platform</title>
+    <script>
+      (function() {
+        try {
+          // Initialize Theme
+          var saved = localStorage.getItem('civicai_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = (saved === 'dark' || saved === 'light') ? saved : (prefersDark ? 'dark' : 'light');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.colorScheme = 'light';
+          }
+
+          // Lock Senior-Friendly Typography (18px base root)
+          document.documentElement.setAttribute('data-font-size', 'large');
+
+          // Initialize Multilingual Language & Direction
+          var savedLang = localStorage.getItem('civicai_language') || 'en';
+          document.documentElement.setAttribute('lang', savedLang);
+          if (savedLang === 'ur') {
+            document.documentElement.setAttribute('dir', 'rtl');
+            document.documentElement.classList.add('rtl-layout');
+          } else {
+            document.documentElement.setAttribute('dir', 'ltr');
+            document.documentElement.classList.remove('rtl-layout');
+          }
+        } catch (e) {
+          document.documentElement.setAttribute('data-font-size', 'large');
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-warm-gray text-slate-900 antialiased font-sans min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
