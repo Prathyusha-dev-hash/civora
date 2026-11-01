@@ -50,6 +50,9 @@ const config = {
     LOW: num(process.env.SLA_LOW_HOURS, 96),
   },
 
+  // Secret Vercel Cron sends as "Authorization: Bearer <CRON_SECRET>" to /api/v1/internal/maintenance
+  cronSecret: process.env.CRON_SECRET || '',
+
   seed: {
     staffPassword: process.env.SEED_STAFF_PASSWORD || '',
     demoCitizenPassword: process.env.SEED_DEMO_CITIZEN_PASSWORD || '',

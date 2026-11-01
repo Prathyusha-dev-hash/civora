@@ -10,7 +10,8 @@ const { requestId } = require('./utils/http');
 const app = express();
 
 app.disable('x-powered-by');
-app.set('trust proxy', 'loopback');
+// On Vercel every request arrives through its edge proxy
+app.set('trust proxy', process.env.VERCEL ? true : 'loopback');
 
 app.use(
   helmet({

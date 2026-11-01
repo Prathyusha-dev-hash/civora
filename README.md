@@ -125,6 +125,7 @@ Category routing: roads/safety/traffic → Roadways & Infrastructure; water → 
 - If saving the database record fails, the stored file is deleted, so files and records never drift apart.
 - Retrieval uses `GET /api/v1/files/:id`, with expiring HMAC-signed links and range support for audio.
 - Original photos and voice recordings are **restricted** (staff and the reporter only). The public sees redacted photos.
+- **GridFS:** `STORAGE_PROVIDER=gridfs` stores files inside MongoDB (bucket `evidence`), so they live and get backed up with the data. Required on Vercel.
 - **Cloud storage:** add a provider with the same interface (`put`, `read`, `createReadStream`, `remove`) in `backend/src/storage/` and select it with `STORAGE_PROVIDER`. Controllers and models don't change.
 - **Back up** `backend/storage/uploads` together with the database.
 
@@ -172,7 +173,40 @@ Run `npm run doctor` in `backend/` first. It prints `[FAIL]` with the exact fix 
 
 - **No email/SMS delivery.** Password-reset tokens are returned in the API response in development (`NODE_ENV` ≠ `production`) and logged to the console.
 - Two reports of the same issue submitted within the same second can each create a master incident (no distributed lock).
-- Local disk storage is single-server. Use an object-storage provider for multi-instance deployments.
+- Local disk storage is single-server. Use `STORAGE_PROVIDER=gridfs` (files in MongoDB) for multi-instance or serverless deployments.
 - Gemini output quality (transcription accuracy for noisy audio, translation nuance) should be spot-checked with real recordings before the demo.
+
+## 11. Deploying to Vercel
+
+The repo deploys as **three Vercel projects** from the same GitHub repository, each with its own **Root Directory**. Each folder already contains its `vercel.json`, and local development (`npm start`, `python main.py`, `npm run dev`) is unchanged.
+
+| Project | Root Directory | Entry | Notes |
+|---|---|---|---|
+| AI service | `ai-service` | `api/index.py` (FastAPI) | 120 s max duration |
+| Backend | `backend` | `api/index.js` (Express) | 300 s max duration, daily cron for maintenance |
+| Frontend | `frontend` | Vite build | SPA fallback for client-side routes |
+
+Serverless differences, handled in code:
+- **Files** are stored in MongoDB GridFS (`STORAGE_PROVIDER=gridfs`), because Vercel's disk is not persistent.
+- **Maintenance** (SLA alerts, cleanup, translation retries, crash recovery) runs from Vercel Cron and, at most every 10 minutes, after normal requests.
+- **Uploads**: Vercel caps request bodies at 4.5 MB, so the browser shrinks photos to at most 1600 px JPEG and voice recordings are capped at 5 minutes (32 kbps).
+
+**Atlas:** under Network Access, allow `0.0.0.0/0`. Vercel has no fixed outbound IPs.
+
+**Deploy in this order** (Vercel → Add New → Project → import the repo; set Root Directory and environment variables before deploying):
+
+1. **AI service** (`ai-service`). Variables: `GEMINI_API_KEY`, `AI_SERVICE_TOKEN`, `GEMINI_MODEL`, `GEMINI_FALLBACK_MODELS` (same values as `ai-service/.env`). Check `https://<ai-project>.vercel.app/health`.
+2. **Backend** (`backend`). Variables: everything from `backend/.env`, plus:
+   - `NODE_ENV=production`, `STORAGE_PROVIDER=gridfs`
+   - `AI_SERVICE_URL=https://<ai-project>.vercel.app`
+   - `PUBLIC_API_BASE_URL=https://<backend-project>.vercel.app`
+   - `CORS_ORIGIN=https://<frontend-project>.vercel.app` (fill in after step 3, then redeploy)
+   - `CRON_SECRET=<random string>`
+
+   Check `https://<backend-project>.vercel.app/health`.
+3. **Frontend** (`frontend`). Variable: `VITE_API_BASE_URL=https://<backend-project>.vercel.app/api/v1`.
+4. Set the backend's `CORS_ORIGIN` to the frontend URL and **Redeploy** the backend.
+
+Generate a secret: `node -e "console.log(require('crypto').randomBytes(24).toString('hex'))"`.
 
 See [`docs/API.md`](docs/API.md) for the full API reference.

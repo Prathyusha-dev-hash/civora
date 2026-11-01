@@ -71,19 +71,22 @@ async function cleanupStagedEvidence(maxAgeHours = 24) {
   return old.length;
 }
 
-function startMaintenance(intervalMs = 10 * 60 * 1000) {
-  const run = async () => {
-    try {
-      const breaches = await flagSlaBreaches();
-      const cleaned = await cleanupStagedEvidence();
-      const translated = await retryFailedTranslations();
-      if (breaches || cleaned || translated) console.log(`[Maintenance] SLA breaches flagged: ${breaches}; staged files removed: ${cleaned}; translations recovered: ${translated}`);
-    } catch (err) {
-      console.error('[Maintenance] Run failed:', err.message);
-    }
-  };
-  run();
-  return setInterval(run, intervalMs).unref();
+async function runMaintenance() {
+  try {
+    const breaches = await flagSlaBreaches();
+    const cleaned = await cleanupStagedEvidence();
+    const translated = await retryFailedTranslations();
+    if (breaches || cleaned || translated) console.log(`[Maintenance] SLA breaches flagged: ${breaches}; staged files removed: ${cleaned}; translations recovered: ${translated}`);
+    return { ok: true, breaches, cleaned, translated };
+  } catch (err) {
+    console.error('[Maintenance] Run failed:', err.message);
+    return { ok: false, error: err.message };
+  }
 }
 
-module.exports = { flagSlaBreaches, cleanupStagedEvidence, retryFailedTranslations, startMaintenance };
+function startMaintenance(intervalMs = 10 * 60 * 1000) {
+  runMaintenance();
+  return setInterval(runMaintenance, intervalMs).unref();
+}
+
+module.exports = { flagSlaBreaches, cleanupStagedEvidence, retryFailedTranslations, runMaintenance, startMaintenance };

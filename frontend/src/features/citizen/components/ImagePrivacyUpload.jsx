@@ -3,6 +3,7 @@ import { UploadCloud, ShieldAlert, ShieldCheck, Trash2, Eye, EyeOff, Sparkles } 
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
 import { CivicApiService } from '../../../services/api/client';
+import { compressImage } from '../../../services/media/imageCompression';
 
 export function ImagePrivacyUpload({
   imageFile,
@@ -45,14 +46,20 @@ export function ImagePrivacyUpload({
     }
   };
 
-  const handleSelectFile = (file) => {
+  const handleSelectFile = async (selected) => {
     // Same formats the backend accepts; HEIC/GIF/BMP would otherwise fail only at final submission
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(selected.type)) {
       alert('Please upload a JPEG, PNG, or WebP photo. (On iPhone, set Camera > Formats to "Most Compatible".)');
       return;
     }
-    if (file.size > 10 * 1024 * 1024) {
-      alert('File exceeds 10MB limit.');
+    if (selected.size > 25 * 1024 * 1024) {
+      alert('File exceeds 25MB limit.');
+      return;
+    }
+    // Large phone photos are shrunk before upload; preview, redaction, AI analysis and submission all use this file
+    const file = await compressImage(selected);
+    if (file.size > 4 * 1024 * 1024) {
+      alert('This photo is too large to upload. Please choose a smaller photo.');
       return;
     }
 
@@ -319,7 +326,7 @@ export function ImagePrivacyUpload({
                 Click to upload or drag & drop photo
               </p>
               <p className="text-xs text-[#64748B] dark:text-[#B7C3CE] mt-0.5">
-                PNG, JPG or WebP (max 10MB)
+                PNG, JPG or WebP (max 25MB, large photos are resized automatically)
               </p>
             </div>
           </div>

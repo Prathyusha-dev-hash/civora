@@ -15,6 +15,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/Badge';
 import { AuthorityService, AiService } from '../../../services';
+import { compressImage } from '../../../services/media/imageCompression';
 import { getLanguageMetadata } from '../../../i18n';
 
 export function WorkOrderDetailModal({
@@ -503,10 +504,11 @@ export function WorkOrderDetailModal({
 
                   <input
                     type="file"
-                    accept="image/*"
-                    onChange={(e) => {
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={async (e) => {
                       if (e.target.files && e.target.files[0]) {
-                        const file = e.target.files[0];
+                        // Shrink large phone photos so the upload fits serverless request limits
+                        const file = await compressImage(e.target.files[0]);
                         setResolutionProofFile(file);
                         setResolutionProofUrl(URL.createObjectURL(file));
                       }

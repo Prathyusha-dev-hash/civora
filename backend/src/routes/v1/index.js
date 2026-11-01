@@ -9,6 +9,7 @@ const aiCtl = require('../../controllers/ai.controller');
 const authority = require('../../controllers/authority.controller');
 const admin = require('../../controllers/admin.controller');
 const notifications = require('../../controllers/notifications.controller');
+const maintenanceCtl = require('../../controllers/maintenance.controller');
 
 const router = express.Router();
 
@@ -71,5 +72,8 @@ router.get('/notifications', requireAuth, notifications.list);
 router.patch('/notifications/:id/read', requireAuth, notifications.markRead);
 router.post('/notifications/read-all', requireAuth, notifications.markAllRead);
 router.post('/notifications/mark-all-read', requireAuth, notifications.markAllRead);
+
+// ---- Scheduled housekeeping (Vercel Cron; bearer CRON_SECRET)
+router.get('/internal/maintenance', maintenanceCtl.maintenance);
 
 module.exports = router;

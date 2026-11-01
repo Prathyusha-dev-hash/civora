@@ -1,5 +1,6 @@
 const { config } = require('../config/env');
 const LocalStorageProvider = require('./localProvider');
+const GridFsStorageProvider = require('./gridfsProvider');
 
 let instance = null;
 
@@ -12,8 +13,11 @@ function getStorage() {
     case 'local':
       instance = new LocalStorageProvider(config.storage.localRoot);
       break;
+    case 'gridfs':
+      instance = new GridFsStorageProvider();
+      break;
     default:
-      throw new Error(`Unsupported STORAGE_PROVIDER "${config.storage.provider}". Supported: local`);
+      throw new Error(`Unsupported STORAGE_PROVIDER "${config.storage.provider}". Supported: local, gridfs`);
   }
   return instance;
 }

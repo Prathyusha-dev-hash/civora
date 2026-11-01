@@ -5,6 +5,8 @@ import { Badge } from '../../../components/ui/Badge';
 import { CivicApiService } from '../../../services/api/client';
 import { useLanguage } from '../../../context/useLanguage';
 
+const MAX_RECORDING_SECONDS = 300;
+
 export function VoiceRecorder({
   onTranscriptionChange,
   onAudioCaptured,
@@ -68,6 +70,8 @@ export function VoiceRecorder({
         mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
           ? 'audio/webm;codecs=opus'
           : 'audio/webm',
+        // ~240KB per minute: clear speech, and well under serverless upload limits
+        audioBitsPerSecond: 32000,
       });
 
       mediaRecorder.ondataavailable = (event) => {
@@ -115,6 +119,12 @@ export function VoiceRecorder({
     }
     setIsRecording(false);
   };
+
+  // Stop automatically at the length limit so the upload stays small
+  useEffect(() => {
+    if (isRecording && recordingSeconds >= MAX_RECORDING_SECONDS) handleStopRecording();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRecording, recordingSeconds]);
 
   // Delete recorded audio & reset
   const handleDeleteAudio = () => {
